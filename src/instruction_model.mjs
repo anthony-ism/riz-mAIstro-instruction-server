@@ -11,7 +11,6 @@ export class InstructionModel {
       id: uuidv4(),
       user_id: userId,
       content: content,
-      category: null,
       priority: 3,
       created_at: now,
       updated_at: now
@@ -19,6 +18,7 @@ export class InstructionModel {
   }
 
   static async getInstructions(userId, category = null) {
+    console.log("attempting to get instructions")
     try {
       let params;
       
@@ -59,6 +59,7 @@ export class InstructionModel {
   }
 
   static async addInstruction(userId, content, category = null, priority = 3) {
+    console.log("attempting to add instructions")
     try {
       if (!content) {
         throw new Error('Instruction content cannot be empty');
@@ -93,6 +94,7 @@ export class InstructionModel {
   }
 
   static async updateInstruction(instructionId, updates) {
+    console.log("attempting to update instructions")
     try {
       // Check if instruction exists
       const getParams = {
@@ -145,6 +147,7 @@ export class InstructionModel {
   }
 
   static async deleteInstruction(instructionId) {
+    console.log("attempting to delete instructions")
     try {
       const params = {
         TableName: tableName,
@@ -162,6 +165,7 @@ export class InstructionModel {
   }
 
   static async getAllInstructions() {
+    console.log("attempting to get all instructions")
     try {
       const params = {
         TableName: tableName
@@ -174,26 +178,4 @@ export class InstructionModel {
     }
   }
 
-  static async getCategories() {
-    try {
-      const params = {
-        TableName: tableName
-      };
-
-      const result = await dynamoDb.scan(params).promise();
-      const instructions = result.Items || [];
-      
-      // Extract unique categories
-      const categories = new Set();
-      instructions.forEach(instruction => {
-        if (instruction.category) {
-          categories.add(instruction.category);
-        }
-      });
-      
-      return Array.from(categories);
-    } catch (error) {
-      throw new Error(`Error getting categories: ${error.message}`);
-    }
-  }
 }
